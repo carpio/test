@@ -3,6 +3,20 @@ import unittest
 
 class FindElementByCommandsClass(unittest.TestCase):
     TEST_PATH  = "http://www.seleniumeasy.com/test/input-form-demo.html"
+    #PAGE OBJECT MODEL OR POM
+    input_email_xpath = "//input[@name='email']"
+    input_first_name_xpath = "//input[@name='first_name']"
+    input_last_name_xpath = "//input[@name='last_name']"
+    input_phone_xpath = "//input[@name='phone']"
+    input_address_xpath = "//input[@name='address']"
+    input_city_xpath = "//input[@name='city']"
+    select_stsate_xpath = "//select[@name='state']"
+    input_zip_xpath = "//input[@name='zip']"
+    input_website_xpath = "//input[@name='website']"
+    text_area_project_description_xpath = "//textarea[@name='comment']"
+    radio_hosting_yes_xpath = "//input[@type='radio'][@value='yes']"
+    radio_hosting_no_xpath = "//input[@type='radio'][@value='no']"
+    button_send_xpath = "//button[@type='submit']"
 
     def setUp(self):
         options = webdriver.ChromeOptions()
@@ -36,22 +50,63 @@ class FindElementByCommandsClass(unittest.TestCase):
     #test find collection or array of inputs inside form
     def test_find_input_inside_form(self):
         form = self.driver.find_element_by_xpath("//form[@id='contact_form']")
-        inputs = form.find_elements_by_tag_name("input")
-        print(len(inputs))
+        array_inputs = form.find_elements_by_tag_name("input")
+        print(len(array_inputs))
 
     #test iterate inputs in form
     def test_iterate_input_elements_inside_form(self):
         form = self.driver.find_element_by_xpath("//form[@id='contact_form']")
-        input_elements = form.find_elements_by_tag_name("input")
+        #input_elements = form.find_elements_by_tag_name("input")
+        input_elements = form.find_elements_by_xpath("//div[@class='input-group']/input")        
+        print(len(input_elements))
         for input in input_elements:
-            print(input)
+            input.send_keys("test value")
 
     #test assert
 
     #test find element by id and send keys
     def test_sendKeys(self):
-        search_field = self.driver.find_element_by_name("email")
+        search_field = self.driver.find_element_by_xpath(self.input_email_xpath)
         search_field.click()
         search_field.send_keys("test-email@test.com")
-        
 
+    #test form is valid
+    def test_valid_form(self):
+        self.driver.find_element_by_xpath(self.input_first_name_xpath).send_keys("Jeny")
+        self.driver.find_element_by_xpath(self.input_last_name_xpath).send_keys("Ramirez")
+        self.driver.find_element_by_xpath(self.input_address_xpath).send_keys("1220 Hall Ave")
+        self.driver.find_element_by_xpath(self.input_city_xpath).send_keys("Las Cruces")
+        self.driver.find_element_by_xpath(self.input_email_xpath).send_keys("gjrmz87@gmail.com")
+        self.driver.find_element_by_xpath(self.input_phone_xpath).send_keys("3333333333")
+        self.driver.find_element_by_xpath(self.input_website_xpath).send_keys("www.yahoo.com")
+        self.driver.find_element_by_xpath(self.input_zip_xpath).send_keys("88005")
+
+        button_send = self.driver.find_element_by_xpath(self.button_send_xpath)
+
+        self.assertTrue(button_send.is_enabled())
+        
+    #Table exercise
+    def test_tabla(self):
+        self.driver.get("http://toolsqa.com/automation-practice-table/")
+
+        sample_table = self.driver.find_element_by_xpath("//table[@class='tsc_table_s13'][@summary='Sample Table']")
+
+        table_titles = sample_table.find_elements_by_tag_name("th")
+
+        for title in table_titles:
+            print(title.text)
+
+    #Table test Countries column
+    def test_table_countries_column(self):
+        self.driver.get("http://toolsqa.com/automation-practice-table/")
+
+        sample_table = self.driver.find_element_by_xpath("//table[@class='tsc_table_s13'][@summary='Sample Table']")
+
+        table_rows = sample_table.find_elements_by_tag_name("tr")
+        
+        for row in table_rows:            
+            rows_cells = row.find_elements_by_tag_name("td")
+
+            for cells in rows_cells:
+                print(cells.text)    
+            
