@@ -13,6 +13,6 @@ Setup for Visual Studio Code (R) and Windows
 6.	Navigate to desired directory or create new directory
 7.	Navigate to new folder if necessary
 8.	Type code . in selected directory
-9.	Install Selenium
+9.	Install Selenium (python -m pip install selenium) in VSC terminal
 10.	Download Chrome driver
 
