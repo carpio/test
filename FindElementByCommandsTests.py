@@ -1,5 +1,6 @@
 from selenium import webdriver
 import unittest
+import time
 
 class FindElementByCommandsClass(unittest.TestCase):
     TEST_PATH  = "http://www.seleniumeasy.com/test/input-form-demo.html"
@@ -18,6 +19,12 @@ class FindElementByCommandsClass(unittest.TestCase):
     radio_hosting_no_xpath = "//input[@type='radio'][@value='no']"
     button_send_xpath = "//button[@type='submit']"
 
+    #login phptravel inputs
+    input_username_xpath = "//input[@name='email']"
+    input_password_xpath = "//input[@name='password']"
+    checkbox_remember_me_xpath ="//*[@class='iCheck-helper']"
+    button_login_xpath = "//button[@type='submit']"
+
     def setUp(self):
         options = webdriver.ChromeOptions()
 
@@ -32,7 +39,8 @@ class FindElementByCommandsClass(unittest.TestCase):
 
         # chromedriver executable path
         self.driver = webdriver.Chrome("C:/Users/GLORIAJENIFFERRAMIRE/Downloads/chromedriver_win32/chromedriver.exe",chrome_options=options)
-
+        self.driver.set_script_timeout(2)
+        self.driver.set_page_load_timeout(10)
         self.openPage("")
 
     def tearDown(self):
@@ -107,6 +115,36 @@ class FindElementByCommandsClass(unittest.TestCase):
         for row in table_rows:            
             rows_cells = row.find_elements_by_tag_name("td")
 
-            for cells in rows_cells:
-                print(cells.text)    
+            for cell in rows_cells:
+                print(cell.text)    
+
+    def test_login_phptravels(self):
+
+        self.driver.get("https://www.phptravels.net/admin")
+
+        self.driver.implicitly_wait(5)        
+
+        input_username = self.driver.find_element_by_xpath(self.input_username_xpath)
+
+        input_username.send_keys("admin@phptravels.com")
+
+        input_password = self.driver.find_element_by_xpath(self.input_password_xpath)
+
+        input_password.send_keys("demoadmin")
+
+        input_remember_me = self.driver.find_element_by_xpath(self.checkbox_remember_me_xpath)
+
+        input_remember_me.click()
+
+        button_login = self.driver.find_element_by_xpath(self.button_login_xpath)
+
+        button_login.click()
+
+        self.driver.implicitly_wait(5)
+
+        page_title = self.driver.title
+
+        self.assertEqual(page_title, "Dashboard")
+
+
             
